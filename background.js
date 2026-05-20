@@ -71,28 +71,67 @@ async function analyzeSentence(sentence) {
   const baseUrl = config.baseUrl || "https://api.openai.com/v1";
   const model = config.model || "gpt-4o-mini";
 
-  const prompt = `You are a technical English reading coach.
-The user selected this sentence from a technical document:
+  const prompt = `You are a technical English reading coach. Follow this methodology strictly:
+
+## CORE PRINCIPLE
+Do NOT translate word-by-word. Read sentences like an AST (Abstract Syntax Tree), not linearly.
+A sentence = skeleton + modifiers + supplements.
+
+## READING METHODOLOGY
+
+Step 1 - Find the skeleton first:
+Ignore commas, dashes, parenthetical phrases, and relative clauses.
+Only look for: WHO + DOES WHAT + TO WHAT
+
+Step 2 - Identify fixed phrase patterns (interpret as semantic units, never split):
+Common patterns:
+- "look to" = rely on / turn to
+- "help ... by ..." = help through ...
+- "take on" = take responsibility for
+- "build on" = develop further based on
+- "open up" = bring about / create
+- "eat up" = consume (memory/time)
+- "scale up" = expand
+- "A is key to B" = A is critical for B
+- "shoulder" = take on (responsibility)
+
+Step 3 - Identify modifier structures:
+- Relative clause (that/which/who): describes a noun
+- Dash (—): example or supplement
+- "by + gerund": how something is done
+- Gerund subject (e.g. "Integrating X into Y"): the action itself is the subject
+
+Step 4 - Note nominalization (technical English converts verbs to nouns):
+- "use" → "leveraging"
+- "put into" → "integrating into"
+Always restore to natural meaning.
+
+## ANALYSIS TASK
+Analyze this sentence from a technical document:
 "${sentence}"
 
-Analyze it in three parts:
-
-1. SKELETON
-Identify the true subject and main verb, stripped of all modifiers.
-
-2. STRUCTURE
-Name the sentence type (e.g. relative clause, passive voice, cleft sentence).
-Then rewrite the core meaning in one simple English sentence.
-
-3. PLAIN MEANING
-Express the full meaning in natural Chinese, as if explaining to a colleague.
-Not a word-for-word translation — what does this sentence actually say?
-
+## OUTPUT FORMAT
 Output ONLY valid JSON, no extra text:
 {
-  "skeleton": { "subject": "", "verb": "", "object": "" },
-  "structure": { "type": "", "simplified": "" },
-  "plain": ""
+  "skeleton": {
+    "subject": "true subject, stripped of all modifiers",
+    "verb": "main verb phrase as semantic unit (e.g. 'relies on', not just 'relies')",
+    "object": "object if any, else empty string"
+  },
+  "ast": {
+    "root": "skeleton rewritten as one minimal English sentence",
+    "branches": [
+      { "role": "modifies subject | modifies verb | purpose | condition | example | supplement", "content": "branch content in English" }
+    ]
+  },
+  "fixed_phrases": [
+    { "phrase": "the original phrase", "meaning": "its semantic meaning in this context" }
+  ],
+  "structure": {
+    "type": "sentence type (e.g. relative clause, passive voice, cleft sentence, gerund subject)",
+    "simplified": "core meaning as one simple English sentence"
+  },
+  "plain": "natural Chinese — based on semantic chunks, not word-by-word. Read like a native speaker explaining the concept to a colleague."
 }`;
 
   try {

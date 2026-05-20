@@ -123,7 +123,7 @@ function showPanel(sentence) {
       return;
     }
 
-    const { skeleton, structure, plain } = response.result;
+    const { skeleton, ast, fixed_phrases, structure, plain } = response.result;
     const content = panel.querySelector(".tr-content");
     content.style.display = "block";
 
@@ -135,18 +135,39 @@ function showPanel(sentence) {
       ${skeleton.object ? `<div class="tr-row"><span class="tr-label">宾语</span><span class="tr-value">${escapeHtml(skeleton.object)}</span></div>` : ""}
     `;
 
-    // 句型层，解锁但折叠
+    // AST 树形层
     const structureSection = panel.querySelector("#tr-structure");
     structureSection.classList.remove("tr-locked");
+    const roleLabel = { "modifies subject": "修饰主语", "modifies verb": "修饰谓语", "purpose": "目的", "condition": "条件", "example": "举例" };
+    const branchesHtml = (ast.branches || []).map((b, i) => {
+      const isLast = i === ast.branches.length - 1;
+      const label = roleLabel[b.role] || b.role;
+      return `
+        <div class="tr-ast-branch">
+          <span class="tr-ast-line">${isLast ? "└──" : "├──"}</span>
+          <span class="tr-ast-role">${escapeHtml(label)}</span>
+          <span class="tr-ast-content">${escapeHtml(b.content)}</span>
+        </div>`;
+    }).join("");
     structureSection.querySelector(".tr-section-body").innerHTML = `
-      <div class="tr-row"><span class="tr-label">句型</span><span class="tr-value">${escapeHtml(structure.type)}</span></div>
-      <div class="tr-row"><span class="tr-label">简化</span><span class="tr-value">${escapeHtml(structure.simplified)}</span></div>
+      <div class="tr-ast-root">
+        <span class="tr-ast-root-label">ROOT</span>
+        <span class="tr-ast-root-content">${escapeHtml(ast.root)}</span>
+      </div>
+      ${branchesHtml}
+      <div class="tr-row tr-ast-type"><span class="tr-label">句型</span><span class="tr-value">${escapeHtml(structure.type)}</span></div>
     `;
 
     // 意思层，解锁但折叠
     const plainSection = panel.querySelector("#tr-plain");
     plainSection.classList.remove("tr-locked");
+    const phrasesHtml = (fixed_phrases || []).length > 0
+      ? `<div class="tr-phrases">${(fixed_phrases).map(p =>
+          `<div class="tr-phrase-row"><span class="tr-phrase-orig">${escapeHtml(p.phrase)}</span><span class="tr-phrase-arrow">→</span><span class="tr-phrase-meaning">${escapeHtml(p.meaning)}</span></div>`
+        ).join("")}</div>`
+      : "";
     plainSection.querySelector(".tr-section-body").innerHTML = `
+      ${phrasesHtml}
       <div class="tr-plain-text">${escapeHtml(plain)}</div>
     `;
   }).catch(err => {

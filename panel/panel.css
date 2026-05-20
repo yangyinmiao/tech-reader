@@ -163,6 +163,100 @@
   line-height: 1.7;
 }
 
+/* ── AST 树形 ── */
+.tr-ast-root {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 8px;
+  padding: 6px 10px;
+  background: #f4f4fb;
+  border-radius: 6px;
+}
+
+.tr-ast-root-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #ffffff;
+  background: #5555bb;
+  border-radius: 4px;
+  padding: 1px 6px;
+  flex-shrink: 0;
+  letter-spacing: 0.05em;
+}
+
+.tr-ast-root-content {
+  font-size: 13px;
+  color: #1a1a3a;
+  font-weight: 500;
+}
+
+.tr-ast-branch {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 3px 0 3px 8px;
+  font-size: 13px;
+}
+
+.tr-ast-line {
+  color: #ccccdd;
+  font-family: monospace;
+  flex-shrink: 0;
+}
+
+.tr-ast-role {
+  font-size: 11px;
+  color: #8888bb;
+  background: #f0f0f8;
+  border-radius: 3px;
+  padding: 1px 5px;
+  flex-shrink: 0;
+}
+
+.tr-ast-content {
+  color: #2a2a4a;
+}
+
+.tr-ast-type {
+  margin-top: 8px;
+  padding-top: 8px;
+  border-top: 1px solid #f0f0f5;
+}
+
+/* ── 固定短语 ── */
+.tr-phrases {
+  margin-bottom: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid #f0f0f5;
+}
+
+.tr-phrase-row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 3px 0;
+  font-size: 13px;
+}
+
+.tr-phrase-orig {
+  font-family: monospace;
+  color: #4444aa;
+  background: #f0f0fb;
+  padding: 1px 6px;
+  border-radius: 3px;
+  flex-shrink: 0;
+}
+
+.tr-phrase-arrow {
+  color: #ccccdd;
+  flex-shrink: 0;
+}
+
+.tr-phrase-meaning {
+  color: #2a2a4a;
+}
+
 /* ── Hover 查词 tooltip ── */
 #tech-reader-tooltip {
   max-width: 300px;
