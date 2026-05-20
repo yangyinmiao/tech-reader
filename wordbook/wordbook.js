@@ -1,39 +1,15 @@
 // wordbook.js
 // 词库可视化页面逻辑
 
-const DB_NAME = "tech-reader";
-const STORE_NAME = "words";
-
-function openDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open(DB_NAME, 1);
-    req.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains(STORE_NAME)) {
-        db.createObjectStore(STORE_NAME, { keyPath: "word" });
-      }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
 async function getAllWords() {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(STORE_NAME, "readonly").objectStore(STORE_NAME).getAll();
-    req.onsuccess = () => resolve(req.result || []);
-    req.onerror = () => reject(req.error);
-  });
+  const all = await browser.storage.local.get(null);
+  return Object.entries(all)
+    .filter(([k]) => k.startsWith("word:"))
+    .map(([, v]) => v);
 }
 
 async function deleteWord(word) {
-  const db = await openDB();
-  return new Promise((resolve, reject) => {
-    const req = db.transaction(STORE_NAME, "readwrite").objectStore(STORE_NAME).delete(word);
-    req.onsuccess = () => resolve();
-    req.onerror = () => reject(req.error);
-  });
+  await browser.storage.local.remove("word:" + word.toLowerCase());
 }
 
 // ---- 状态 ----

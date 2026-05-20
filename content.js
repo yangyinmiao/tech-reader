@@ -334,36 +334,18 @@ function removeTooltip() {
   }
 }
 
-// IndexedDB 简单封装（content script 里用）
-function openWordDB() {
-  return new Promise((resolve, reject) => {
-    const req = indexedDB.open("tech-reader", 1);
-    req.onupgradeneeded = (e) => {
-      const db = e.target.result;
-      if (!db.objectStoreNames.contains("words")) {
-        db.createObjectStore("words", { keyPath: "word" });
-      }
-    };
-    req.onsuccess = () => resolve(req.result);
-    req.onerror = () => reject(req.error);
-  });
-}
-
+// 词库存储：用 browser.storage.local，content script 和 extension 页面共享同一份数据
 async function getWordRecord(word) {
-  const db = await openWordDB();
-  return new Promise((resolve) => {
-    const req = db.transaction("words", "readonly").objectStore("words").get(word.toLowerCase());
-    req.onsuccess = () => resolve(req.result || null);
-    req.onerror = () => resolve(null);
-  });
+  const key = "word:" + word.toLowerCase();
+  const result = await browser.storage.local.get(key);
+  return result[key] || null;
 }
 
 async function recordWordLocal(word, explanation, type) {
-  const db = await openWordDB();
+  const key = "word:" + word.toLowerCase();
   const existing = await getWordRecord(word);
   const entry = existing
     ? { ...existing, count: existing.count + 1, lastSeen: Date.now() }
     : { word: word.toLowerCase(), explanation, type, count: 1, firstSeen: Date.now(), lastSeen: Date.now() };
-
-  db.transaction("words", "readwrite").objectStore("words").put(entry);
+  await browser.storage.local.set({ [key]: entry });
 }
