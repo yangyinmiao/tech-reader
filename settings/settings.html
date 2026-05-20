@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <title>Tech Reader 设置</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      background: #0f0f1a;
+      color: #d0d0f0;
+      font-family: system-ui, -apple-system, sans-serif;
+      font-size: 14px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      padding: 48px 16px;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .header {
+      margin-bottom: 32px;
+    }
+
+    .header h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #e0e0ff;
+      margin-bottom: 6px;
+    }
+
+    .header p {
+      font-size: 13px;
+      color: #555577;
+      line-height: 1.6;
+    }
+
+    .section {
+      background: #13131f;
+      border: 1px solid #1e1e3a;
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .section-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: #6060aa;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 16px;
+    }
+
+    .field {
+      margin-bottom: 14px;
+    }
+
+    .field:last-child {
+      margin-bottom: 0;
+    }
+
+    label {
+      display: block;
+      font-size: 13px;
+      color: #9090cc;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      background: #0a0a14;
+      border: 1px solid #1e1e3a;
+      border-radius: 6px;
+      color: #d0d0f0;
+      font-size: 13px;
+      padding: 8px 12px;
+      outline: none;
+      transition: border-color 0.15s;
+      font-family: monospace;
+    }
+
+    input:focus {
+      border-color: #4040aa;
+    }
+
+    input::placeholder {
+      color: #333355;
+    }
+
+    .hint {
+      font-size: 11px;
+      color: #444466;
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+
+    .preset-list {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: 10px;
+    }
+
+    .preset-btn {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 5px;
+      color: #7070aa;
+      font-size: 11px;
+      padding: 4px 10px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .preset-btn:hover {
+      background: #22224a;
+      color: #a0a0dd;
+      border-color: #3a3a6a;
+    }
+
+    .actions {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      margin-top: 8px;
+    }
+
+    .btn-save {
+      background: #3030aa;
+      border: none;
+      border-radius: 7px;
+      color: #e0e0ff;
+      font-size: 14px;
+      font-weight: 500;
+      padding: 10px 24px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-save:hover {
+      background: #4040cc;
+    }
+
+    .save-status {
+      font-size: 13px;
+      color: #55aa55;
+      opacity: 0;
+      transition: opacity 0.3s;
+    }
+
+    .save-status.visible {
+      opacity: 1;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <h1>Tech Reader 设置</h1>
+      <p>填写你自己的 AI 接口信息。支持 OpenAI 及所有兼容 OpenAI 格式的服务（DeepSeek、通义千问、月之暗面等）。</p>
+    </div>
+
+    <div class="section">
+      <div class="section-title">接口配置</div>
+
+      <div class="field">
+        <label>API Key</label>
+        <input type="password" id="apiKey" placeholder="sk-..." />
+      </div>
+
+      <div class="field">
+        <label>Base URL</label>
+        <input type="text" id="baseUrl" placeholder="https://api.openai.com/v1" />
+        <div class="hint">留空默认使用 OpenAI 官方接口</div>
+        <div class="preset-list">
+          <button class="preset-btn" data-url="https://api.deepseek.com/v1">DeepSeek</button>
+          <button class="preset-btn" data-url="https://dashscope.aliyuncs.com/compatible-mode/v1">通义千问</button>
+          <button class="preset-btn" data-url="https://api.moonshot.cn/v1">月之暗面</button>
+          <button class="preset-btn" data-url="https://api.openai.com/v1">OpenAI</button>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>模型</label>
+        <input type="text" id="model" placeholder="gpt-4o-mini" />
+        <div class="hint">推荐：deepseek-chat（便宜且效果好）、gpt-4o-mini</div>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button class="btn-save" id="saveBtn">保存设置</button>
+      <span class="save-status" id="saveStatus">已保存 ✓</span>
+    </div>
+  </div>
+
+  <script src="settings.js"></script>
+</body>
+</html>

@@ -1,0 +1,215 @@
+#tech-reader-panel {
+  position: fixed;
+  top: 60px;
+  right: 20px;
+  width: 360px;
+  max-height: 80vh;
+  overflow-y: auto;
+  z-index: 2147483646;
+  background: #ffffff;
+  color: #1a1a2e;
+  border-radius: 12px;
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.12), 0 1px 4px rgba(0, 0, 0, 0.08);
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 14px;
+  line-height: 1.6;
+  border: 1px solid #e8e8f0;
+}
+
+/* 头部 */
+.tr-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  border-bottom: 1px solid #f0f0f5;
+}
+
+.tr-title {
+  font-size: 12px;
+  font-weight: 600;
+  color: #6060aa;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+
+.tr-close {
+  background: none;
+  border: none;
+  color: #aaaacc;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0 4px;
+  line-height: 1;
+  transition: color 0.15s;
+}
+
+.tr-close:hover {
+  color: #666688;
+}
+
+/* 原句 */
+.tr-sentence {
+  padding: 10px 16px;
+  font-size: 13px;
+  color: #8888aa;
+  border-bottom: 1px solid #f0f0f5;
+  font-style: italic;
+  word-break: break-word;
+}
+
+/* 加载中 */
+.tr-loading {
+  padding: 20px 16px;
+  color: #aaaacc;
+  font-size: 13px;
+  text-align: center;
+}
+
+/* 错误 */
+.tr-error {
+  padding: 16px;
+  color: #cc4444;
+  font-size: 13px;
+}
+
+/* 内容区 */
+.tr-content {
+  padding: 8px 0;
+}
+
+/* 每个分析块 */
+.tr-section {
+  padding: 10px 16px;
+  border-bottom: 1px solid #f4f4f8;
+}
+
+.tr-section:last-child {
+  border-bottom: none;
+}
+
+.tr-section-title {
+  font-size: 13px;
+  font-weight: 600;
+  color: #4444aa;
+  margin-bottom: 8px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.tr-section-title:hover {
+  color: #2222aa;
+}
+
+.tr-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: #aaaacc;
+}
+
+/* 锁定状态 */
+.tr-locked .tr-section-title {
+  color: #ccccdd;
+  cursor: default;
+}
+
+.tr-locked .tr-section-title:hover {
+  color: #ccccdd;
+}
+
+.tr-unlock-hint {
+  font-size: 11px;
+  font-weight: 400;
+  color: #bbbbdd;
+  border: 1px solid #ddddee;
+  border-radius: 4px;
+  padding: 1px 6px;
+}
+
+.tr-section:not(.tr-locked) .tr-unlock-hint {
+  color: #6666bb;
+  border-color: #aaaadd;
+  cursor: pointer;
+}
+
+/* 行数据 */
+.tr-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 6px;
+  align-items: baseline;
+}
+
+.tr-label {
+  font-size: 11px;
+  color: #aaaacc;
+  min-width: 28px;
+  flex-shrink: 0;
+}
+
+.tr-value {
+  font-size: 13px;
+  color: #2a2a4a;
+  word-break: break-word;
+}
+
+/* 最终翻译 */
+.tr-plain-text {
+  font-size: 14px;
+  color: #1a1a3a;
+  line-height: 1.7;
+}
+
+/* ── Hover 查词 tooltip ── */
+#tech-reader-tooltip {
+  max-width: 300px;
+  background: #ffffff;
+  border: 1px solid #e0e0ee;
+  border-radius: 8px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.1);
+  padding: 10px 14px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 13px;
+  line-height: 1.6;
+  pointer-events: none;
+}
+
+.tr-tt-type {
+  font-size: 11px;
+  color: #8888bb;
+  font-style: italic;
+  margin-bottom: 4px;
+}
+
+.tr-tt-explanation {
+  color: #1a1a3a;
+  font-size: 13px;
+}
+
+.tr-tt-example {
+  margin-top: 6px;
+  color: #6666aa;
+  font-size: 12px;
+  font-style: italic;
+  border-left: 2px solid #ddddf0;
+  padding-left: 8px;
+}
+
+.tr-tt-count {
+  margin-top: 6px;
+  font-size: 11px;
+  color: #aaaacc;
+}
+
+.tr-tt-loading {
+  color: #aaaacc;
+  font-size: 12px;
+}
+
+.tr-tt-error {
+  color: #cc4444;
+  font-size: 12px;
+}
