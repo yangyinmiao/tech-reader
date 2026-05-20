@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tech Reader · 我的词库</title>
+  <link rel="stylesheet" href="wordbook.css">
+</head>
+<body>
+  <div class="wb-container">
+    <header class="wb-header">
+      <div class="wb-title-row">
+        <h1 class="wb-title">我的词库</h1>
+        <span class="wb-subtitle">越用越不需要它</span>
+      </div>
+      <div class="wb-stats" id="wb-stats">
+        <div class="wb-stat-item">
+          <span class="wb-stat-num" id="stat-total">—</span>
+          <span class="wb-stat-label">收录词汇</span>
+        </div>
+        <div class="wb-stat-item">
+          <span class="wb-stat-num" id="stat-today">—</span>
+          <span class="wb-stat-label">今日新词</span>
+        </div>
+        <div class="wb-stat-item">
+          <span class="wb-stat-num" id="stat-lookups">—</span>
+          <span class="wb-stat-label">累计查询</span>
+        </div>
+        <div class="wb-stat-item">
+          <span class="wb-stat-num" id="stat-familiar">—</span>
+          <span class="wb-stat-label">熟悉词（≥5次）</span>
+        </div>
+      </div>
+    </header>
+
+    <div class="wb-toolbar">
+      <input class="wb-search" id="wb-search" type="text" placeholder="搜索单词…" autocomplete="off">
+      <div class="wb-sort-group">
+        <button class="wb-sort-btn active" data-sort="count">按频率</button>
+        <button class="wb-sort-btn" data-sort="lastSeen">最近查看</button>
+        <button class="wb-sort-btn" data-sort="firstSeen">加入时间</button>
+        <button class="wb-sort-btn" data-sort="az">A-Z</button>
+      </div>
+    </div>
+
+    <div class="wb-list" id="wb-list">
+      <div class="wb-empty" id="wb-empty" style="display:none">
+        <div class="wb-empty-icon">📖</div>
+        <p>还没有收录任何单词</p>
+        <p class="wb-empty-hint">在任意网页上悬停英文单词，Tech Reader 会自动帮你记录</p>
+      </div>
+    </div>
+  </div>
+
+  <script src="wordbook.js"></script>
+</body>
+</html>

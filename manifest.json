@@ -24,6 +24,20 @@
     }
   ],
 
+  "web_accessible_resources": [
+    "wordbook/wordbook.html",
+    "wordbook/wordbook.css",
+    "wordbook/wordbook.js"
+  ],
+
+  "browser_action": {
+    "default_title": "Tech Reader 词库",
+    "default_icon": {
+      "48": "icons/icon48.png",
+      "96": "icons/icon96.png"
+    }
+  },
+
   "options_ui": {
     "page": "settings/settings.html",
     "open_in_tab": true

@@ -1,6 +1,11 @@
 // background.js
 console.log("[Tech Reader] background loaded");
 
+// 点击插件图标 → 打开词库页面
+browser.browserAction.onClicked.addListener(() => {
+  browser.tabs.create({ url: browser.runtime.getURL("wordbook/wordbook.html") });
+});
+
 browser.runtime.onMessage.addListener((message, sender) => {
   console.log("[Tech Reader] 收到消息:", message.type);
   if (message.type === "ANALYZE_SENTENCE") {
