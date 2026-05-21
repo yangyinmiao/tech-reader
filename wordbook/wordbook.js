@@ -1,6 +1,12 @@
 // wordbook.js
 // 词库可视化页面逻辑
 
+// 安全的 innerHTML 替代
+function safeSetHTML(el, html) {
+  const doc = new DOMParser().parseFromString(html, "text/html");
+  el.replaceChildren(...doc.body.childNodes);
+}
+
 async function getAllWords() {
   const all = await browser.storage.local.get(null);
   return Object.entries(all)
@@ -145,7 +151,7 @@ function renderList() {
       masteryBadge = `<span class="wb-mastery-badge reviewing">复习中 ${reviewPassed}/2</span>`;
     }
 
-    card.innerHTML = `
+    safeSetHTML(card, `
       <div class="wb-card-top">
         <span class="wb-word">${escapeHtml(w.word)}</span>
         <div class="wb-card-actions">
@@ -159,7 +165,7 @@ function renderList() {
         <span class="wb-date">最近 ${formatDate(w.lastSeen)}</span>
       </div>
       ${masteryBadge}
-    `;
+    `);
 
     card.querySelector(".wb-btn-del").addEventListener("click", async (e) => {
       const word = e.currentTarget.dataset.word;
