@@ -139,10 +139,10 @@ Output ONLY valid JSON, no extra text:
     ]
   },
   "fixed_phrases": [
-    { "phrase": "the original phrase", "meaning": "its semantic meaning in this context" }
+    { "phrase": "the original phrase", "meaning": "用中文说明这个短语在此句中的语义" }
   ],
   "structure": {
-    "type": "sentence type (e.g. relative clause, passive voice, cleft sentence, gerund subject)",
+    "type": "用中文说明句型（如：关系从句、被动语态、裂变句、动名词主语等）",
     "simplified": "core meaning as one simple English sentence"
   },
   "plain": "用自然流畅的中文重新表达这句话的意思。不是翻译，而是：如果你完全理解了这句话，你会怎么跟中国同事口头解释这个意思？要求：①整句全部用中文，不要中英混杂；②只有无法替代的编程专有名词才保留英文（如 component、API、props、state、runtime），其他所有词都翻成中文；③固定短语按语义整体翻译，不要逐词对应；④语气自然，像开发者在说话，不要书面翻译腔。"
