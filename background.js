@@ -23,20 +23,24 @@ async function explainWord(word) {
   const baseUrl = config.baseUrl || "https://api.openai.com/v1";
   const model = config.model || "gpt-4o-mini";
 
+  const langPref = (await browser.storage.local.get("explanationLang")).explanationLang || "zh";
+
   const prompt = `You are a technical English vocabulary coach.
 Explain the word or phrase: "${word}"
 
 Rules:
-- Write the explanation IN ENGLISH only, no Chinese
 - Focus on its technical meaning in software/programming context
-- Keep it under 2 sentences
+- Keep each explanation under 2 sentences
 - Include word type (noun/verb/adj/phrase)
+- explanation_zh: 用中文解释，自然口语化，技术专有名词保留英文
+- explanation_en: explain in English only, no Chinese
 
 Output ONLY valid JSON:
 {
   "word": "${word}",
   "type": "",
-  "explanation": "",
+  "explanation_zh": "",
+  "explanation_en": "",
   "example": ""
 }`;
 
@@ -57,7 +61,12 @@ Output ONLY valid JSON:
     const data = await response.json();
     let content = data.choices[0].message.content.trim();
     content = content.replace(/^```(?:json)?\n?/, "").replace(/\n?```$/, "");
-    return { result: JSON.parse(content) };
+    const parsed = JSON.parse(content);
+    // 根据语言偏好选择 explanation 字段，兼容旧格式
+    const explanation = langPref === "en"
+      ? (parsed.explanation_en || parsed.explanation || "")
+      : (parsed.explanation_zh || parsed.explanation || "");
+    return { result: { ...parsed, explanation } };
   } catch (err) {
     console.error("[Tech Reader] explainWord 失败:", err.message);
     return { error: err.message };

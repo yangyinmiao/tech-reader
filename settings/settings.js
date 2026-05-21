@@ -1,10 +1,24 @@
 // settings.js
 
 // 加载已保存的配置
-browser.storage.local.get(["apiKey", "baseUrl", "model"]).then(config => {
+browser.storage.local.get(["apiKey", "baseUrl", "model", "explanationLang"]).then(config => {
   if (config.apiKey) document.getElementById("apiKey").value = config.apiKey;
   if (config.baseUrl) document.getElementById("baseUrl").value = config.baseUrl;
   if (config.model) document.getElementById("model").value = config.model;
+
+  // 语言偏好，默认 zh
+  const lang = config.explanationLang || "zh";
+  document.querySelectorAll(".lang-btn").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.lang === lang);
+  });
+});
+
+// 语言切换按钮
+document.querySelectorAll(".lang-btn").forEach(btn => {
+  btn.addEventListener("click", () => {
+    document.querySelectorAll(".lang-btn").forEach(b => b.classList.remove("active"));
+    btn.classList.add("active");
+  });
 });
 
 // 预设 URL 快速填入
@@ -19,8 +33,9 @@ document.getElementById("saveBtn").addEventListener("click", () => {
   const apiKey = document.getElementById("apiKey").value.trim();
   const baseUrl = document.getElementById("baseUrl").value.trim();
   const model = document.getElementById("model").value.trim();
+  const explanationLang = document.querySelector(".lang-btn.active")?.dataset.lang || "zh";
 
-  browser.storage.local.set({ apiKey, baseUrl, model }).then(() => {
+  browser.storage.local.set({ apiKey, baseUrl, model, explanationLang }).then(() => {
     const status = document.getElementById("saveStatus");
     status.classList.add("visible");
     setTimeout(() => status.classList.remove("visible"), 2000);

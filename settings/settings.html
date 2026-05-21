@@ -156,6 +156,34 @@
     .save-status.visible {
       opacity: 1;
     }
+
+    .lang-toggle {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 6px;
+    }
+
+    .lang-btn {
+      background: #1a1a2e;
+      border: 1px solid #2a2a4a;
+      border-radius: 6px;
+      color: #7070aa;
+      font-size: 13px;
+      padding: 7px 16px;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .lang-btn:hover {
+      border-color: #4040aa;
+      color: #a0a0dd;
+    }
+
+    .lang-btn.active {
+      background: #22224a;
+      border-color: #5050cc;
+      color: #c0c0ff;
+    }
   </style>
 </head>
 <body>
@@ -189,6 +217,18 @@
         <label>模型</label>
         <input type="text" id="model" placeholder="gpt-4o-mini" />
         <div class="hint">推荐：deepseek-chat（便宜且效果好）、gpt-4o-mini</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-title">阅读偏好</div>
+      <div class="field">
+        <label>词义解释语言</label>
+        <div class="lang-toggle">
+          <button class="lang-btn active" data-lang="zh">中文解释（默认）</button>
+          <button class="lang-btn" data-lang="en">英文解释</button>
+        </div>
+        <div class="hint">中文模式适合入门，英文模式帮助建立英文→概念的直接连接</div>
       </div>
     </div>
 
