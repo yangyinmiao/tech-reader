@@ -246,17 +246,25 @@ body {
   color: var(--text3);
 }
 
-/* Badge for familiar */
-.wb-familiar-badge {
+/* Badge for mastery */
+.wb-mastery-badge {
   position: absolute;
   top: 12px;
   right: 12px;
   font-size: 10px;
-  color: var(--green);
-  background: rgba(52,211,153,0.12);
   border-radius: 4px;
   padding: 1px 7px;
   pointer-events: none;
+}
+
+.wb-mastery-badge.mastered {
+  color: #059669;
+  background: rgba(5,150,105,0.1);
+}
+
+.wb-mastery-badge.reviewing {
+  color: #7c6ef0;
+  background: rgba(99,102,241,0.1);
 }
 
 /* Empty */

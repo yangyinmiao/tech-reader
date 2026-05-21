@@ -197,6 +197,8 @@ function escapeHtml(str) {
 let hoverTimer = null;
 let tooltip = null;
 let lastWord = null;
+let tooltipWord = null;      // 当前 tooltip 对应的词
+let tooltipIsChallenge = false; // 当前是否挑战模式
 
 document.addEventListener("mousemove", (e) => {
   const el = e.target;
@@ -297,8 +299,12 @@ async function fetchAndShowTooltip(word, x, y) {
     if (needsReview) {
       // 超过 3 天没见过，先挑战模式
       tooltip.innerHTML = buildTooltipHtml(existing.explanation, existing.type, null, existing.count, null, null, daysSince);
+      tooltipWord = word;
+      tooltipIsChallenge = true;
     } else {
       tooltip.innerHTML = buildTooltipHtml(existing.explanation, existing.type, null, existing.count);
+      tooltipWord = null;
+      tooltipIsChallenge = false;
     }
     document.body.appendChild(tooltip);
 
@@ -364,8 +370,14 @@ function buildTooltipHtml(explanation, type, loading, count, error, example, day
 
 function removeTooltip() {
   if (tooltip) {
+    // 挑战模式：关闭时"看答案"按钮还在 → 用户自己想起来了 → 复习通过
+    if (tooltipIsChallenge && tooltipWord && tooltip.querySelector(".tr-tt-reveal-btn")) {
+      markReviewPassed(tooltipWord);
+    }
     tooltip.remove();
     tooltip = null;
+    tooltipWord = null;
+    tooltipIsChallenge = false;
   }
 }
 
@@ -381,6 +393,17 @@ async function recordWordLocal(word, explanation, type) {
   const existing = await getWordRecord(word);
   const entry = existing
     ? { ...existing, count: existing.count + 1, lastSeen: Date.now() }
-    : { word: word.toLowerCase(), explanation, type, count: 1, firstSeen: Date.now(), lastSeen: Date.now() };
+    : { word: word.toLowerCase(), explanation, type, count: 1, reviewPassed: 0, firstSeen: Date.now(), lastSeen: Date.now() };
   await browser.storage.local.set({ [key]: entry });
+}
+
+// 复习通过：用户在挑战模式下自己想起来了，不需要看答案
+async function markReviewPassed(word) {
+  const existing = await getWordRecord(word);
+  if (!existing) return;
+  const reviewPassed = (existing.reviewPassed || 0) + 1;
+  const mastered = reviewPassed >= 2;
+  await browser.storage.local.set({
+    ["word:" + word.toLowerCase()]: { ...existing, reviewPassed, mastered }
+  });
 }

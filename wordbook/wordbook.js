@@ -48,7 +48,7 @@ function updateStats() {
   const total = allWords.length;
   const todayNew = allWords.filter((w) => w.firstSeen >= todayTs).length;
   const totalLookups = allWords.reduce((sum, w) => sum + (w.count || 0), 0);
-  const familiar = allWords.filter((w) => w.count >= 5).length;
+  const familiar = allWords.filter((w) => w.mastered).length;
 
   document.getElementById("stat-total").textContent = total;
   document.getElementById("stat-today").textContent = todayNew;
@@ -133,8 +133,17 @@ function renderList() {
     card.className = "wb-card";
     card.dataset.word = w.word;
 
-    const isFamiliar = (w.count || 0) >= 5;
+    const isMastered = !!w.mastered;
+    const reviewPassed = w.reviewPassed || 0;
     const cls = countClass(w.count || 0);
+
+    // 掌握度标签
+    let masteryBadge = "";
+    if (isMastered) {
+      masteryBadge = `<span class="wb-mastery-badge mastered">已掌握 ✓</span>`;
+    } else if (reviewPassed >= 1) {
+      masteryBadge = `<span class="wb-mastery-badge reviewing">复习中 ${reviewPassed}/2</span>`;
+    }
 
     card.innerHTML = `
       <div class="wb-card-top">
@@ -149,7 +158,7 @@ function renderList() {
         <span class="wb-count">查了 <span class="wb-count-num ${cls}">${w.count || 0}</span> 次</span>
         <span class="wb-date">最近 ${formatDate(w.lastSeen)}</span>
       </div>
-      ${isFamiliar ? `<span class="wb-familiar-badge">熟悉</span>` : ""}
+      ${masteryBadge}
     `;
 
     card.querySelector(".wb-btn-del").addEventListener("click", async (e) => {
