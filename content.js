@@ -290,9 +290,28 @@ async function fetchAndShowTooltip(word, x, y) {
   `;
 
   if (existing) {
-    // 本地有记录，直接展示，不请求 AI
-    tooltip.innerHTML = buildTooltipHtml(existing.explanation, existing.type, null, existing.count);
+    // 本地有记录
+    const daysSince = Math.floor((Date.now() - (existing.lastSeen || 0)) / 86400000);
+    const needsReview = daysSince >= 3;
+
+    if (needsReview) {
+      // 超过 3 天没见过，先挑战模式
+      tooltip.innerHTML = buildTooltipHtml(existing.explanation, existing.type, null, existing.count, null, null, daysSince);
+    } else {
+      tooltip.innerHTML = buildTooltipHtml(existing.explanation, existing.type, null, existing.count);
+    }
     document.body.appendChild(tooltip);
+
+    // 挑战模式：绑定"看答案"按钮
+    const revealBtn = tooltip.querySelector(".tr-tt-reveal-btn");
+    if (revealBtn) {
+      revealBtn.addEventListener("click", (e) => {
+        e.stopPropagation();
+        tooltip.querySelector(".tr-tt-answer-wrap").style.display = "block";
+        revealBtn.remove();
+      });
+    }
+
     recordWordLocal(word, existing.explanation, existing.type);
   } else {
     // 展示加载状态，同时请求 AI
@@ -312,13 +331,29 @@ async function fetchAndShowTooltip(word, x, y) {
   }
 }
 
-function buildTooltipHtml(explanation, type, loading, count, error, example) {
+function buildTooltipHtml(explanation, type, loading, count, error, example, daysSince) {
   if (loading) {
     return `<div class="tr-tt-loading">查询中…</div>`;
   }
   if (error) {
     return `<div class="tr-tt-error">${escapeHtml(error)}</div>`;
   }
+
+  // 超过 3 天 → 挑战模式：先不展示释义
+  if (daysSince >= 3) {
+    const daysText = daysSince >= 30 ? "30 天以上" : `${daysSince} 天`;
+    return `
+      <div class="tr-tt-review-hint">你 ${daysText}前查过这个词，试着自己想想看 💪</div>
+      ${type ? `<div class="tr-tt-type">${escapeHtml(type)}</div>` : ""}
+      <div class="tr-tt-answer-wrap" style="display:none">
+        <div class="tr-tt-explanation">${escapeHtml(explanation || "")}</div>
+        ${example ? `<div class="tr-tt-example">${escapeHtml(example)}</div>` : ""}
+      </div>
+      <button class="tr-tt-reveal-btn">看答案</button>
+      <div class="tr-tt-count">已查 ${count || 0} 次</div>
+    `;
+  }
+
   return `
     ${type ? `<div class="tr-tt-type">${escapeHtml(type)}</div>` : ""}
     <div class="tr-tt-explanation">${escapeHtml(explanation || "")}</div>
