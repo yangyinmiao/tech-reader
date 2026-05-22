@@ -210,7 +210,7 @@ let tooltipIsChallenge = false; // 当前是否挑战模式
 document.addEventListener("mousemove", (e) => {
   const el = e.target;
   if (el.id === "tech-reader-trigger" || el.closest("#tech-reader-panel") || el.closest("#tech-reader-tooltip")) return;
-  if (!["P", "LI", "TD", "SPAN", "A", "H1", "H2", "H3", "H4", "CODE", "PRE"].includes(el.tagName)) {
+  if (!["P", "LI", "TD", "SPAN", "A", "H1", "H2", "H3", "H4", "CODE", "PRE", "STRONG", "B", "EM", "I", "DT", "DD"].includes(el.tagName)) {
     clearTimeout(hoverTimer);
     removeTooltip();
     lastWord = null;
