@@ -245,7 +245,9 @@
   background: #f0f0fb;
   padding: 1px 6px;
   border-radius: 3px;
-  flex-shrink: 0;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-wrap: anywhere;
 }
 
 .tr-phrase-arrow {
@@ -255,6 +257,8 @@
 
 .tr-phrase-meaning {
   color: #2a2a4a;
+  flex-shrink: 0;
+  min-width: 120px;
 }
 
 /* ── Hover 查词 tooltip ── */
@@ -336,4 +340,3 @@
 .tr-tt-reveal-btn:hover {
   background: #e4e0ff;
 }
-
